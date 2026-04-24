@@ -37,7 +37,7 @@ Route::middleware(['auth', 'is.admin'])->prefix('admin')->name('admin.')->group(
     })->name('dashboard');
 
     // Admin bisa akses semua complaint untuk dikelola
-    Route::get('/complaints', [ComplaintController::class, 'index'])->name('complaints.index');
+    Route::get('/complaints', [ComplaintController::class, 'adminIndex'])->name('complaints.index');
     Route::get('/complaints/{complaint}', [ComplaintController::class, 'show'])->name('complaints.show');
 });
 

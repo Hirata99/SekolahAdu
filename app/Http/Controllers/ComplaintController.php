@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Complaint;
 use Illuminate\Http\Request;
 
 class ComplaintController extends Controller
@@ -11,7 +11,14 @@ class ComplaintController extends Controller
      */
     public function index()
     {
-        //
+        $complaints = auth()->user()->complaints()->latest()->get();
+        return view('complaints.index', compact('complaints'));
+    }
+
+    public function adminIndex()
+    {
+        $complaints = Complaint::with('user')->latest()->get();
+        return view('admin.complaints.index', compact('complaints'));
     }
 
     /**
