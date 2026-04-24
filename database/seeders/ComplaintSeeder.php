@@ -12,13 +12,13 @@ class ComplaintSeeder extends Seeder
      */
     public function run(): void
     {
-        
+
     // Buat 1 admin manual
     \App\Models\User::factory()->create([
         'name' => 'Admin Sarpras',
         'email' => 'admin@sekolah.adu',
         'role' => 'admin',
-        'password' => bcrypt('password'),
+        'password' => bcrypt('123456789'),
     ]);
 
     // Buat 20 data complaint dummy
