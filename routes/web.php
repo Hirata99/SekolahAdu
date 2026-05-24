@@ -39,7 +39,7 @@ Route::middleware(['auth', 'is.admin'])->prefix('admin')->name('admin.')->group(
 
     // Admin bisa akses semua complaint untuk dikelola
     Route::get('/complaints', [ComplaintController::class, 'adminIndex'])->name('complaints.index');
-    Route::get('/complaints/{complaint}', [ComplaintController::class, 'show'])->name('complaints.show');
-});
+    Route::resource('complaints', ComplaintController::class)->except(['index', 'create', 'store']);
+}); 
 
 require __DIR__.'/auth.php';

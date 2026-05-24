@@ -1,47 +1,39 @@
 @extends('layouts.app')
-
-@section('title', 'Daftar Laporan')
-
+@section('title', 'Kelola Laporan')
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>📋 Laporan Saya</h2>
-        <a href="{{ route('complaints.create') }}" class="btn btn-primary">+ Buat Laporan</a>
-    </div>
-
-    <div class="card">
+    <h2>️ Kelola Semua Laporan</h2>
+    @if(session('success'))
+        <div class="alert alert-success mt-3">{{ session('success') }}</div>
+    @endif
+    <div class="card mt-3">
         <div class="card-body">
-            <table class="table table-hover">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th>Pelapor</th>
                         <th>Judul</th>
-                        <th>Lokasi</th>
                         <th>Status</th>
                         <th>Tanggal</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($complaints as $complaint)
+                    @foreach($complaints as $complaint)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $complaint->user->name }}</td>
                             <td>{{ $complaint->judul }}</td>
-                            <td>{{ $complaint->lokasi }}</td>
-                            <td>
-                                <span class="badge bg-{{ $complaint->status === 'selesai' ? 'success' : ($complaint->status === 'proses' ? 'info' : 'warning') }}">
-                                    {{ ucfirst($complaint->status) }}
-                                </span>
-                            </td>
+                            <td><span class="badge bg-secondary">{{ $complaint->status }}</span></td>
                             <td>{{ $complaint->created_at->format('d M Y') }}</td>
                             <td>
-                                <a href="{{ route('complaints.show', $complaint->id) }}" class="btn btn-sm btn-info">Detail</a>
+                                <a href="{{ route('admin.complaints.edit', $complaint->id) }}" class="btn btn-sm btn-warning">Edit Status</a>
+                                <form action="{{ route('admin.complaints.destroy', $complaint->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus laporan ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-danger">Hapus</button>
+                                </form>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center">Belum ada laporan.</td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
         </div>

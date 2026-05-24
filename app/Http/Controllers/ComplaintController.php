@@ -70,24 +70,47 @@ class ComplaintController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Complaint $complaint)
     {
-        //
+        return view('admin.complaints.edit', compact('complaint'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Complaint $complaint)
     {
-        //
+        $validated = $request->validate([
+            'status' => 'required|in:pending,proses,selesai',
+            'tanggapan_admin' => 'nullable|string|max:500',
+        ]);
+
+        $complaint->update($validated);
+
+        return redirect()->route('admin.complaints.index')->with('success', 'Status laporan berhasil diupdate!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Complaint $complaint)
     {
-        //
+        // Hapus foto jika ada
+        if ($complaint->foto) {
+            Storage::disk('public')->delete($complaint->foto);
+        }
+
+        $complaint->delete();
+        return redirect()->route('admin.complaints.index')->with('success', 'Laporan berhasil dihapus!');
     }
+
+    public function adminDashboard()
+    {
+        $stats = [
+            'pending' => Complaint::where('status', 'pending')->count(),
+            'proses' => Complaint::where('status', 'proses')->count(),
+            'selesai' => Complaint::where('status', 'selesai')->count(),
+        ];
+        return view('admin.dashboard', compact('stats'));
+    }       
 }
