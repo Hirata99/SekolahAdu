@@ -3,6 +3,14 @@
 @section('title', 'Daftar Laporan')
 
 @section('content')
+
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+@endif
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>📋 Laporan Saya</h2>
         <a href="{{ route('complaints.create') }}" class="btn btn-primary">+ Buat Laporan</a>

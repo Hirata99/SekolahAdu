@@ -14,6 +14,7 @@ Route::get('dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
+
 // Routes yang wajib login
 Route::middleware(['auth'])->group(function () {
 
