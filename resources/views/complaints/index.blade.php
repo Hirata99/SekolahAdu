@@ -4,12 +4,25 @@
 
 @section('content')
 
-@if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-@endif
+    <form action="{{ route('complaints.index') }}" method="GET" class="mb-4">
+        <div class="row">
+            <div class="col-md-6">
+                <input type="text" name="search" class="form-control" 
+                    placeholder="Cari judul laporan..." value="{{ request('search') }}">
+            </div>
+            <div class="col-md-3">
+                <select name="status" class="form-select">
+                    <option value="">Semua Status</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="proses" {{ request('status') == 'proses' ? 'selected' : '' }}>Proses</option>
+                    <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">🔍 Filter</button>
+            </div>
+        </div>
+    </form>
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>📋 Laporan Saya</h2>
@@ -54,4 +67,20 @@
             </table>
         </div>
     </div>
+
+    <div class="mt-3">
+        {{ $complaints->links('pagination::bootstrap-5') }}
+    </div>
 @endsection
+@push('scripts')
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Sukses!',
+                text: '{{ session('success') }}',
+                timer: 3000,
+            });
+        </script>
+    @endif
+@endpush
